@@ -1,0 +1,88 @@
+{
+  "version": "7.3",
+  "data_api_version": "3.0",
+  "routing_model": {
+    "COUNTRY": ["UNIVERSITY"],
+    "UNIVERSITY": ["COURSE"],
+    "COURSE": ["CONFIRM"],
+    "CONFIRM": ["DONE"],
+    "DONE": []
+  },
+  "screens": [
+    {
+      "id": "COUNTRY",
+      "title": "Select Country",
+      "data": {
+        "countries": { "type": "array", "items": { "type": "object", "properties": { "id": { "type": "string" }, "title": { "type": "string" } } }, "__example__": [{ "id": "DE", "title": "Germany" }] }
+      },
+      "layout": {
+        "type": "SingleColumnLayout",
+        "children": [{
+          "type": "Form", "name": "country_form", "children": [
+            { "type": "TextHeading", "text": "Select Country" },
+            { "type": "Dropdown", "label": "Country", "name": "country", "required": true, "data-source": "${data.countries}" },
+            { "type": "Footer", "label": "Continue", "on-click-action": { "name": "data_exchange", "payload": { "step": "load_universities", "country": "${form.country}" } } }
+          ]
+        }]
+      }
+    },
+    {
+      "id": "UNIVERSITY",
+      "title": "Select University",
+      "data": {
+        "country": { "type": "string", "__example__": "DE" },
+        "country_name": { "type": "string", "__example__": "Germany" },
+        "universities": { "type": "array", "items": { "type": "object", "properties": { "id": { "type": "string" }, "title": { "type": "string" } } }, "__example__": [{ "id": "1", "title": "TU Munich" }] }
+      },
+      "layout": { "type": "SingleColumnLayout", "children": [{
+        "type": "Form", "name": "university_form", "children": [
+          { "type": "TextHeading", "text": "Select University" },
+          { "type": "Dropdown", "label": "University", "name": "university", "required": true, "data-source": "${data.universities}" },
+          { "type": "Footer", "label": "Continue", "on-click-action": { "name": "data_exchange", "payload": { "step": "load_courses", "country": "${data.country}", "university": "${form.university}" } } }
+        ]
+      }] }
+    },
+    {
+      "id": "COURSE",
+      "title": "Select Course",
+      "data": {
+        "country": { "type": "string", "__example__": "DE" }, "country_name": { "type": "string", "__example__": "Germany" },
+        "university": { "type": "string", "__example__": "1" }, "university_name": { "type": "string", "__example__": "TU Munich" },
+        "courses": { "type": "array", "items": { "type": "object", "properties": { "id": { "type": "string" }, "title": { "type": "string" } } }, "__example__": [{ "id": "1", "title": "Computer Science" }] }
+      },
+      "layout": { "type": "SingleColumnLayout", "children": [{
+        "type": "Form", "name": "course_form", "children": [
+          { "type": "TextHeading", "text": "Select Course" },
+          { "type": "Dropdown", "label": "Course", "name": "course", "required": true, "data-source": "${data.courses}" },
+          { "type": "Footer", "label": "Continue", "on-click-action": { "name": "data_exchange", "payload": { "step": "show_confirmation", "country": "${data.country}", "university": "${data.university}", "course": "${form.course}" } } }
+        ]
+      }] }
+    },
+    {
+      "id": "CONFIRM",
+      "title": "Confirm Selection",
+      "data": {
+        "country": { "type": "string", "__example__": "DE" }, "country_name": { "type": "string", "__example__": "Germany" },
+        "university": { "type": "string", "__example__": "1" }, "university_name": { "type": "string", "__example__": "TU Munich" },
+        "course": { "type": "string", "__example__": "1" }, "course_name": { "type": "string", "__example__": "Computer Science" }
+      },
+      "layout": { "type": "SingleColumnLayout", "children": [{
+        "type": "Form", "name": "confirm_form", "children": [
+          { "type": "TextHeading", "text": "Confirm" },
+          { "type": "TextBody", "text": "Country: ${data.country_name}\nUniversity: ${data.university_name}\nCourse: ${data.course_name}" },
+          { "type": "Footer", "label": "Submit", "on-click-action": { "name": "data_exchange", "payload": { "step": "submit_application", "country": "${data.country}", "university": "${data.university}", "course": "${data.course}" } } }
+        ]
+      }] }
+    },
+    {
+      "id": "DONE", "title": "Submitted", "terminal": true,
+      "data": { "message": { "type": "string", "__example__": "Your selection has been submitted." } },
+      "layout": { "type": "SingleColumnLayout", "children": [{
+        "type": "Form", "name": "done_form", "children": [
+          { "type": "TextBody", "text": "${data.message}" },
+          { "type": "Footer", "label": "Done", "on-click-action": { "name": "complete", "payload": {} } }
+        ]
+      }] }
+    }
+  ]
+}

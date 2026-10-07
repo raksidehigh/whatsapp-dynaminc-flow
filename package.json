@@ -1,0 +1,18 @@
+{
+  "name": "whatsapp-dynamic-flow-demo",
+  "version": "1.0.0",
+  "description": "Educational WhatsApp Flows data_exchange demo with Express and SQLite",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "db:setup": "node src/database/db.js",
+    "db:seed": "node src/database/seed.js",
+    "test:local": "node scripts/test-flow.js",
+    "test:encrypted": "node scripts/test-encrypted.js"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.8.1",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2"
+  }
+}

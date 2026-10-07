@@ -1,0 +1,6 @@
+node_modules/
+.env
+data/*.db
+keys/*.pem
+keys/*.key
+npm-debug.log*
