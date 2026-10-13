@@ -1,6 +1,10 @@
 require('dotenv').config();
 const express = require('express');
+const { setupDatabase } = require('./database/db');
 const whatsappFlowRouter = require('./routes/whatsappFlow');
+
+// Idempotent: creates missing tables/columns so schema changes apply on restart.
+setupDatabase();
 
 const app = express();
 app.use(express.json({ limit: '1mb' }));

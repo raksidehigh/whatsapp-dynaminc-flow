@@ -8,7 +8,8 @@
     "db:setup": "node src/database/db.js",
     "db:seed": "node src/database/seed.js",
     "test:local": "node scripts/test-flow.js",
-    "test:encrypted": "node scripts/test-encrypted.js"
+    "test:encrypted": "node scripts/test-encrypted.js",
+    "send:flow": "node scripts/send-flow.js"
   },
   "dependencies": {
     "better-sqlite3": "^11.8.1",

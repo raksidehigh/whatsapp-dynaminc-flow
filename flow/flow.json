@@ -2,6 +2,8 @@
   "version": "7.3",
   "data_api_version": "3.0",
   "routing_model": {
+    "WELCOME": ["DETAILS"],
+    "DETAILS": ["COUNTRY"],
     "COUNTRY": ["UNIVERSITY"],
     "UNIVERSITY": ["COURSE"],
     "COURSE": ["CONFIRM"],
@@ -9,6 +11,39 @@
     "DONE": []
   },
   "screens": [
+    {
+      "id": "WELCOME",
+      "title": "Welcome",
+      "layout": {
+        "type": "SingleColumnLayout",
+        "children": [
+          { "type": "TextHeading", "text": "Find your course" },
+          { "type": "TextBody", "text": "Share your details, then choose a country, university, and course. Tap Start to load the latest options." },
+          { "type": "Footer", "label": "Start", "on-click-action": { "name": "data_exchange", "payload": { "step": "load_details" } } }
+        ]
+      }
+    },
+    {
+      "id": "DETAILS",
+      "title": "Your Details",
+      "data": {
+        "phone": { "type": "string", "__example__": "919999999999" },
+        "first_name": { "type": "string", "__example__": "Asha" },
+        "last_name": { "type": "string", "__example__": "Verma" },
+        "email": { "type": "string", "__example__": "asha@example.com" }
+      },
+      "layout": {
+        "type": "SingleColumnLayout",
+        "children": [
+          { "type": "TextHeading", "text": "Your details" },
+          { "type": "TextBody", "text": "`'WhatsApp number: +' ${data.phone}`" },
+          { "type": "TextInput", "label": "First name", "name": "first_name", "input-type": "text", "required": true, "init-value": "${data.first_name}" },
+          { "type": "TextInput", "label": "Last name", "name": "last_name", "input-type": "text", "required": true, "init-value": "${data.last_name}" },
+          { "type": "TextInput", "label": "Email address", "name": "email", "input-type": "email", "required": true, "init-value": "${data.email}" },
+          { "type": "Footer", "label": "Continue", "on-click-action": { "name": "data_exchange", "payload": { "step": "save_details", "first_name": "${form.first_name}", "last_name": "${form.last_name}", "email": "${form.email}" } } }
+        ]
+      }
+    },
     {
       "id": "COUNTRY",
       "title": "Select Country",
@@ -62,6 +97,8 @@
       "id": "CONFIRM",
       "title": "Confirm Selection",
       "data": {
+        "full_name": { "type": "string", "__example__": "Asha Verma" }, "email": { "type": "string", "__example__": "asha@example.com" },
+        "phone": { "type": "string", "__example__": "919999999999" },
         "country": { "type": "string", "__example__": "DE" }, "country_name": { "type": "string", "__example__": "Germany" },
         "university": { "type": "string", "__example__": "1" }, "university_name": { "type": "string", "__example__": "TU Munich" },
         "course": { "type": "string", "__example__": "1" }, "course_name": { "type": "string", "__example__": "Computer Science" }
@@ -69,7 +106,12 @@
       "layout": { "type": "SingleColumnLayout", "children": [{
         "type": "Form", "name": "confirm_form", "children": [
           { "type": "TextHeading", "text": "Confirm" },
-          { "type": "TextBody", "text": "Country: ${data.country_name}\nUniversity: ${data.university_name}\nCourse: ${data.course_name}" },
+          { "type": "TextBody", "text": "`'Name: ' ${data.full_name}`" },
+          { "type": "TextBody", "text": "`'Email: ' ${data.email}`" },
+          { "type": "TextBody", "text": "`'WhatsApp: +' ${data.phone}`" },
+          { "type": "TextBody", "text": "`'Country: ' ${data.country_name}`" },
+          { "type": "TextBody", "text": "`'University: ' ${data.university_name}`" },
+          { "type": "TextBody", "text": "`'Course: ' ${data.course_name}`" },
           { "type": "Footer", "label": "Submit", "on-click-action": { "name": "data_exchange", "payload": { "step": "submit_application", "country": "${data.country}", "university": "${data.university}", "course": "${data.course}" } } }
         ]
       }] }

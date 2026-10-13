@@ -22,7 +22,7 @@ const envelope = {
 };
 
 (async () => {
-  const response = await fetch('http://localhost:3000/api/whatsapp/flow', {
+  const response = await fetch(`http://localhost:${process.env.PORT || 3000}/api/whatsapp/flow`, {
     method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(envelope)
   });
   if (!response.ok) throw new Error(`Encrypted endpoint returned HTTP ${response.status}`);
@@ -32,6 +32,6 @@ const envelope = {
   decipher.setAuthTag(encryptedResponse.subarray(-16));
   const clearResponse = Buffer.concat([decipher.update(encryptedResponse.subarray(0, -16)), decipher.final()]);
   const result = JSON.parse(clearResponse.toString('utf8'));
-  if (result.screen !== 'COUNTRY' || !Array.isArray(result.data.countries)) throw new Error('Unexpected decrypted Flow response');
-  console.log(`Encrypted endpoint round-trip succeeded. Screen=${result.screen}; countries=${result.data.countries.length}.`);
+  if (result.screen !== 'WELCOME') throw new Error('Unexpected decrypted Flow response');
+  console.log(`Encrypted endpoint round-trip succeeded. Screen=${result.screen}.`);
 })().catch(error => { console.error(error.message); process.exitCode = 1; });

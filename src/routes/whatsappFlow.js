@@ -42,7 +42,7 @@ router.post('/flow/simulate', (req, res) => {
 });
 
 router.get('/applications', (_req, res) => {
-  const rows = db.prepare(`SELECT a.id, c.name AS country, u.name AS university, co.name AS course, a.created_at
+  const rows = db.prepare(`SELECT a.id, a.phone, a.first_name, a.last_name, a.email, c.name AS country, u.name AS university, co.name AS course, a.created_at
     FROM applications a JOIN countries c ON c.id=a.country_id JOIN universities u ON u.id=a.university_id
     JOIN courses co ON co.id=a.course_id ORDER BY a.id DESC`).all();
   res.json(rows);
